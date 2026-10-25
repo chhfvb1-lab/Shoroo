@@ -179,8 +179,8 @@ function draw(){var m=Math.floor(left/60),s=left%60;$("clock").textContent=fa((m
 $("pg").style.strokeDashoffset=C*(1-left/total);$("go").textContent=tick?"توقف":"شروع";forest()}
 function setMode(m){stop();mode=m;total=left=m*60;
 document.querySelectorAll("[data-m]").forEach(function(b){b.setAttribute("aria-pressed",+b.dataset.m===m)});draw()}
-function stop(){if(tick){clearInterval(tick);tick=null}draw()}
-function start(){if(tick)return;end=Date.now()+left*1000;
+function stop(){if(tick){clearInterval(tick);tick=null}try{window.Android&&Android.cancel()}catch(e){}draw()}
+function start(){if(tick)return;end=Date.now()+left*1000;try{window.Android&&Android.schedule(left,mode===5)}catch(e){}
 tick=setInterval(function(){left=Math.max(0,Math.round((end-Date.now())/1000));draw();if(left<=0){stop();done()}},250);draw()}
 function done(){try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}
 left=total;draw();
